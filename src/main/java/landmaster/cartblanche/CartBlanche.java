@@ -34,7 +34,12 @@ public class CartBlanche {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "ender_chest_cart"), EntityEnderChestCart.class, "EnderChestCart", 0, INSTANCE, 256, 2, true);
+		(config = new Config(event)).init();
+		config.update();
+		
+		if (Config.ender_chest_cart) {
+			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "ender_chest_cart"), EntityEnderChestCart.class, "EnderChestCart", 0, INSTANCE, 256, 2, true);
+		}
 		proxy.initEntityRendering();
 	}
 	
@@ -42,7 +47,9 @@ public class CartBlanche {
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().register(ModItems.mod_minecart);
 		for (ItemModMinecart.Type type: ItemModMinecart.Type.values()) {
-			proxy.registerItemRenderer(ModItems.mod_minecart, type.ordinal(), "mod_minecart_"+type.toString().toLowerCase(Locale.US));
+			if (type.config.getAsBoolean()) {
+				proxy.registerItemRenderer(ModItems.mod_minecart, type.ordinal(), "mod_minecart_"+type.toString().toLowerCase(Locale.US));
+			}
 		}
 	}
 	

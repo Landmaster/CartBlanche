@@ -1,6 +1,7 @@
 package landmaster.cartblanche.proxy;
 
 import landmaster.cartblanche.api.*;
+import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.entity.*;
@@ -11,7 +12,9 @@ import net.minecraftforge.fml.client.registry.*;
 public class ClientProxy extends CommonProxy {
 	@Override
 	public void initEntityRendering() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityEnderChestCart.class, RenderMinecart<EntityEnderChestCart>::new);
+		if (Config.ender_chest_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityEnderChestCart.class, RenderMinecart<EntityEnderChestCart>::new);
+		}
 	}
 	
 	@Override

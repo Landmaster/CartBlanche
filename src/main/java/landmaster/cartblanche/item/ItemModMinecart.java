@@ -1,7 +1,9 @@
 package landmaster.cartblanche.item;
 
 import java.util.*;
+import java.util.function.*;
 
+import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.*;
@@ -17,12 +19,14 @@ import net.minecraft.world.*;
 
 public class ItemModMinecart extends ItemMinecart {
 	public static enum Type {
-		ENDER_CHEST(EntityEnderChestCart::new);
+		ENDER_CHEST(EntityEnderChestCart::new, () -> Config.ender_chest_cart);
 		
 		public final IIndividualMinecartFactory factory;
+		public final BooleanSupplier config;
 		
-		Type(IIndividualMinecartFactory factory) {
+		Type(IIndividualMinecartFactory factory, BooleanSupplier config) {
 			this.factory = factory;
+			this.config = config;
 		}
 	}
 	
@@ -122,7 +126,9 @@ public class ItemModMinecart extends ItemMinecart {
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		if (this.isInCreativeTab(tab)) {
 			for (Type type : Type.values()) {
-				subItems.add(new ItemStack(this, 1, type.ordinal()));
+				if (type.config.getAsBoolean()) {
+					subItems.add(new ItemStack(this, 1, type.ordinal()));
+				}
 			}
 		}
 	}
