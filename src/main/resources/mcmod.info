@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cartblanche",
+  "name": "Cart Blanche",
+  "description": "Add new minecarts to Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/cartblanche",
+  "updateUrl": "https://minecraft.curseforge.com/projects/cartblanche/files",
+  "authorList": ["Landmaster (phuong0429)"],
+  "credits": "",
+  "logoFile": "assets/mcfmt/logo.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
