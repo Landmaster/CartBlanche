@@ -20,7 +20,7 @@ import net.minecraftforge.common.capabilities.*;
 import net.minecraftforge.items.*;
 
 public class EntityJukeboxCart extends EntityMinecart {
-	private IItemHandler record = new ItemStackHandler(1) {
+	private ItemStackHandler record = new ItemStackHandler(1) {
 		@Override
 		public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
 			return stack.getItem() instanceof ItemRecord;
@@ -81,12 +81,14 @@ public class EntityJukeboxCart extends EntityMinecart {
 	protected void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.getDataManager().set(DISABLED, compound.getBoolean("Disabled"));
+		record.deserializeNBT(compound.getCompoundTag("Record"));
 	}
 	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("Disabled", this.getDataManager().get(DISABLED));
+		compound.setTag("Record", record.serializeNBT());
 	}
 	
 	@Override
