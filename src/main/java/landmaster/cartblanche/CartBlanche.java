@@ -40,6 +40,9 @@ public class CartBlanche {
 		if (Config.ender_chest_cart) {
 			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "ender_chest_cart"), EntityEnderChestCart.class, "EnderChestCart", 0, INSTANCE, 256, 2, true);
 		}
+		if (Config.jukebox_cart) {
+			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "jukebox_cart"), EntityJukeboxCart.class, "JukeboxCart", 1, INSTANCE, 256, 2, true);
+		}
 		proxy.initEntityRendering();
 	}
 	

@@ -19,7 +19,8 @@ import net.minecraft.world.*;
 
 public class ItemModMinecart extends ItemMinecart {
 	public static enum Type {
-		ENDER_CHEST(EntityEnderChestCart::new, () -> Config.ender_chest_cart);
+		ENDER_CHEST(EntityEnderChestCart::new, () -> Config.ender_chest_cart),
+		JUKEBOX(EntityJukeboxCart::new, () -> Config.jukebox_cart);
 		
 		public final IIndividualMinecartFactory factory;
 		public final BooleanSupplier config;

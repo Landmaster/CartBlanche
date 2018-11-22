@@ -1,3 +1,5 @@
 item.mod_minecart.ender_chest.name=Ender Chest Cart
+item.mod_minecart.jukebox.name=Jukebox Cart
 
 entity.EnderChestCart.name=Ender Chest Cart
+entity.JukeboxCart.name=Jukebox Cart

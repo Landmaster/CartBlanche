@@ -1,0 +1,19 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"pattern": [
+		"A",
+		"B"
+	],
+	"key": {
+		"A": {
+			"item": "minecraft:jukebox"
+		},
+		"B": {
+			"item": "minecraft:minecart"
+		}
+	},
+	"result": {
+		"item": "cartblanche:mod_minecart",
+		"data": 1
+	}
+}

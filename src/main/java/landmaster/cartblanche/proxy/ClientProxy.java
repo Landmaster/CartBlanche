@@ -3,9 +3,14 @@ package landmaster.cartblanche.proxy;
 import landmaster.cartblanche.api.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
+import landmaster.cartblanche.sound.*;
+import net.minecraft.client.*;
+import net.minecraft.client.audio.*;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.item.*;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.fml.client.registry.*;
 
@@ -14,6 +19,9 @@ public class ClientProxy extends CommonProxy {
 	public void initEntityRendering() {
 		if (Config.ender_chest_cart) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityEnderChestCart.class, RenderMinecart<EntityEnderChestCart>::new);
+		}
+		if (Config.jukebox_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityJukeboxCart.class, RenderMinecart<EntityJukeboxCart>::new);
 		}
 	}
 	
@@ -32,4 +40,27 @@ public class ClientProxy extends CommonProxy {
 			ModelBakery.registerItemVariants(item, rl);
 		}
 	}
+	
+	@Override
+	public Object playJukeboxCartSound(SoundEvent soundIn, SoundCategory categoryIn, EntityJukeboxCart cart) {
+		JukeboxCartSound sound = new JukeboxCartSound(soundIn, categoryIn, cart);
+		Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+		return sound;
+	}
+	
+	@Override
+	public boolean isSoundPlaying(Object sound) {
+		if (sound instanceof ISound) {
+			return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying((ISound)sound);
+		}
+		return false;
+	}
+	
+	@Override
+	public void stopSound(Object sound) {
+		if (sound instanceof ISound) {
+			//System.out.println("SOUND STOPPED! "+sound);
+			Minecraft.getMinecraft().getSoundHandler().stopSound((ISound)sound);
+		}
+	};
 }
