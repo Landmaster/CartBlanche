@@ -46,7 +46,9 @@ public class BeaconCartLevelRecipe extends Impl<IRecipe> implements IRecipe {
 					.isBeaconBase(
 							new FakeOneBlockAccess(Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata())),
 							BlockPos.ORIGIN, BlockPos.ORIGIN)) {
-				blocks.add(stack);
+				ItemStack oneItemStack = stack.copy();
+				oneItemStack.setCount(1);
+				blocks.add(oneItemStack);
 			} else {
 				return ItemStack.EMPTY;
 			}
