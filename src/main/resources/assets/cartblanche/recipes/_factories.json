@@ -1,0 +1,5 @@
+{
+	"conditions": {
+		"minecart_enabled": "landmaster.cartblanche.util.MinecartEnabled"
+	}
+}

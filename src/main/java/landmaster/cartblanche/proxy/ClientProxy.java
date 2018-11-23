@@ -3,6 +3,7 @@ package landmaster.cartblanche.proxy;
 import landmaster.cartblanche.api.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
+import landmaster.cartblanche.entity.render.*;
 import landmaster.cartblanche.sound.*;
 import net.minecraft.client.*;
 import net.minecraft.client.audio.*;
@@ -22,6 +23,9 @@ public class ClientProxy extends CommonProxy {
 		}
 		if (Config.jukebox_cart) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityJukeboxCart.class, RenderMinecart<EntityJukeboxCart>::new);
+		}
+		if (Config.beacon_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityBeaconCart.class, RenderBeaconCart::new);
 		}
 	}
 	

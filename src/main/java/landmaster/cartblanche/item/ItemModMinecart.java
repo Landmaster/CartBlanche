@@ -2,30 +2,49 @@ package landmaster.cartblanche.item;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
+
+import javax.annotation.*;
 
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
+import net.minecraft.advancements.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.*;
 import net.minecraft.block.state.*;
+import net.minecraft.client.resources.*;
+import net.minecraft.client.util.*;
 import net.minecraft.creativetab.*;
 import net.minecraft.dispenser.*;
 import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.*;
+import net.minecraft.init.*;
 import net.minecraft.item.*;
+import net.minecraft.nbt.*;
+import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
+import net.minecraft.util.text.*;
 import net.minecraft.world.*;
 
 public class ItemModMinecart extends ItemMinecart {
+	public static final int BEACON_CART_MAX_BLOCKS = 3*3+5*5+7*7+9*9;
+	
 	public static enum Type {
-		ENDER_CHEST(EntityEnderChestCart::new, () -> Config.ender_chest_cart),
-		JUKEBOX(EntityJukeboxCart::new, () -> Config.jukebox_cart);
+		ENDER_CHEST((IReducedMinecartFactory)EntityEnderChestCart::new, () -> Config.ender_chest_cart),
+		JUKEBOX((IReducedMinecartFactory)EntityJukeboxCart::new, () -> Config.jukebox_cart),
+		BEACON((worldIn, x, y, z, stack) -> new EntityBeaconCart(worldIn,x,y,z)
+				.setBeaconMaterials(
+						StreamSupport.stream(stack.getTagCompound().getTagList("BeaconMaterials", 10).spliterator(), false)
+						.map(nbt -> (NBTTagCompound)nbt)
+						.map(ItemStack::new)
+						.collect(Collectors.toList())
+						), () -> Config.beacon_cart);
 		
-		public final IIndividualMinecartFactory factory;
+		public final IMinecartFactory factory;
 		public final BooleanSupplier config;
 		
-		Type(IIndividualMinecartFactory factory, BooleanSupplier config) {
+		Type(IMinecartFactory factory, BooleanSupplier config) {
 			this.factory = factory;
 			this.config = config;
 		}
@@ -87,6 +106,28 @@ public class ItemModMinecart extends ItemMinecart {
 			}
 			
 			world.spawnEntity(entityminecart);
+			
+			// START trigger
+			if (entityminecart instanceof EntityBeaconCart) {
+				double i = entityminecart.posX;
+				double j = entityminecart.posY;
+				double k = entityminecart.posZ;
+				
+				if (!world.isRemote && 0 < ((EntityBeaconCart)entityminecart).getLevels()) {
+					TileEntityBeacon dummy = new TileEntityBeacon();
+					dummy.setWorld(world);
+					dummy.setPos(entityminecart.getPosition());
+					dummy.setField(0, ((EntityBeaconCart)entityminecart).getLevels());
+					
+					for (EntityPlayerMP entityplayermp : world.getEntitiesWithinAABB(EntityPlayerMP.class,
+							(new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k))
+									.grow(10.0D, 5.0D, 10.0D))) {
+						CriteriaTriggers.CONSTRUCT_BEACON.trigger(entityplayermp, dummy);
+					}
+				}
+			}
+			// END trigger
+			
 			stack.shrink(1);
 			return stack;
 		}
@@ -99,8 +140,57 @@ public class ItemModMinecart extends ItemMinecart {
 		}
 	};
 	
+	public int getBeaconLevels(ItemStack stack) {
+		int sz = getNumBlocks(stack);
+		
+		int levels = -1;
+		int len = 0;
+		do {
+			++levels;
+			len += (2 * levels + 3) * (2 * levels + 3);
+		} while (len <= sz);
+		return levels;
+	}
+	
+	public int getNumBlocks(ItemStack stack) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getTagList("BeaconMaterials", 10).tagCount() : 0;
+	}
+	
+	public int getNumBlocksFromLevel(int level) {
+		int len = 0;
+		for (int i=0; i<level; ++i) {
+			len += (2*i+3)*(2*i+3);
+		}
+		return len;
+	}
+	
+	public List<ItemStack> getBeaconMaterials(ItemStack stack) {
+		if (!stack.hasTagCompound()) return Collections.emptyList();
+		return StreamSupport.stream(stack.getTagCompound().getTagList("BeaconMaterials", 10).spliterator(), false)
+		.map(nbt -> (NBTTagCompound)nbt)
+		.map(ItemStack::new)
+		.collect(Collectors.toList());
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		if (stack.getMetadata() == Type.BEACON.ordinal()) {
+			int levels = this.getBeaconLevels(stack), numBlocks = getNumBlocks(stack);
+			tooltip.add(TextFormatting.BLUE+I18n.format("tooltip.beacon_cart_num_blocks.name", numBlocks));
+			tooltip.add(TextFormatting.AQUA+I18n.format("tooltip.beacon_cart_level.name", levels));
+			if (levels < 4) {
+				tooltip.add(TextFormatting.GREEN+I18n.format("tooltip.beacon_cart_blocks_until.name", getNumBlocksFromLevel(levels+1) - numBlocks));
+				tooltip.add(TextFormatting.RED+I18n.format("tooltip.beacon_cart_instructions.name"));
+			}
+		}
+	}
+	
 	@FunctionalInterface
-	public static interface IIndividualMinecartFactory {
+	public static interface IReducedMinecartFactory extends IMinecartFactory {
+		default EntityMinecart create(World worldIn, double x, double y, double z, ItemStack stack) {
+			return this.create(worldIn, x, y, z);
+		}
 		public EntityMinecart create(World worldIn, double x, double y, double z);
 	}
 	
@@ -112,7 +202,7 @@ public class ItemModMinecart extends ItemMinecart {
 	private IMinecartFactory factory;
 	
 	public ItemModMinecart() {
-		this((worldIn, x, y, z, stack) -> Type.values()[stack.getMetadata()].factory.create(worldIn, x, y, z));
+		this((worldIn, x, y, z, stack) -> Type.values()[stack.getMetadata()].factory.create(worldIn, x, y, z, stack));
 	}
 	
 	public ItemModMinecart(IMinecartFactory factory) {
@@ -128,7 +218,22 @@ public class ItemModMinecart extends ItemMinecart {
 		if (this.isInCreativeTab(tab)) {
 			for (Type type : Type.values()) {
 				if (type.config.getAsBoolean()) {
-					subItems.add(new ItemStack(this, 1, type.ordinal()));
+					if (type == Type.BEACON) {
+						ItemStack stack = new ItemStack(this, 1, type.ordinal());
+						int numBlocks = 0;
+						for (int lev=0; lev<=4; ++lev) {
+							NBTTagCompound compound = new NBTTagCompound();
+							compound.setTag("BeaconMaterials", Collections.nCopies(numBlocks, Blocks.IRON_BLOCK).stream()
+									.map(ItemStack::new)
+									.map(ItemStack::serializeNBT)
+									.collect(NBTTagList::new, NBTTagList::appendTag, (list0, list1) -> list1.forEach(list0::appendTag)));
+							stack.setTagCompound(compound);
+							subItems.add(stack.copy());
+							numBlocks += (2*lev+3)*(2*lev+3);
+						}
+					} else {
+						subItems.add(new ItemStack(this, 1, type.ordinal()));
+					}
 				}
 			}
 		}
@@ -137,7 +242,7 @@ public class ItemModMinecart extends ItemMinecart {
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		return super.getTranslationKey(stack) + "."
-				+ Type.values()[stack.getMetadata()].toString().toLowerCase(Locale.US);
+				+ Type.values()[stack.getMetadata()].toString().toLowerCase(java.util.Locale.US);
 	}
 	
 	/**
@@ -172,6 +277,27 @@ public class ItemModMinecart extends ItemMinecart {
 				}
 				
 				worldIn.spawnEntity(entityminecart);
+				
+				// START trigger
+				if (entityminecart instanceof EntityBeaconCart) {
+					double i = entityminecart.posX;
+					double j = entityminecart.posY;
+					double k = entityminecart.posZ;
+					
+					if (!worldIn.isRemote && 0 < ((EntityBeaconCart)entityminecart).getLevels()) {
+						TileEntityBeacon dummy = new TileEntityBeacon();
+						dummy.setWorld(worldIn);
+						dummy.setPos(entityminecart.getPosition());
+						dummy.setField(0, ((EntityBeaconCart)entityminecart).getLevels());
+						
+						for (EntityPlayerMP entityplayermp : worldIn.getEntitiesWithinAABB(EntityPlayerMP.class,
+								(new AxisAlignedBB((double) i, (double) j, (double) k, (double) i, (double) (j - 4), (double) k))
+										.grow(10.0D, 5.0D, 10.0D))) {
+							CriteriaTriggers.CONSTRUCT_BEACON.trigger(entityplayermp, dummy);
+						}
+					}
+				}
+				// END trigger
 			}
 			
 			itemstack.shrink(1);

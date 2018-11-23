@@ -5,11 +5,13 @@ import java.util.*;
 import org.apache.logging.log4j.*;
 
 import landmaster.cartblanche.proxy.*;
+import landmaster.cartblanche.util.*;
 import landmaster.cartblanche.api.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
 import landmaster.cartblanche.item.*;
 import net.minecraft.item.*;
+import net.minecraft.item.crafting.*;
 import net.minecraft.util.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.fml.common.*;
@@ -43,7 +45,13 @@ public class CartBlanche {
 		if (Config.jukebox_cart) {
 			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "jukebox_cart"), EntityJukeboxCart.class, "JukeboxCart", 1, INSTANCE, 256, 2, true);
 		}
+		if (Config.beacon_cart) {
+			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "beacon_cart"), EntityBeaconCart.class, "BeaconCart", 2, INSTANCE, 256, 2, true);
+		}
 		proxy.initEntityRendering();
+		
+		//CraftingHelper.register(new ResourceLocation(ModInfo.MODID, "minecart_enabled"), new MinecartEnabled());
+		//System.out.println(new ResourceLocation(ModInfo.MODID, "minecart_enabled"));
 	}
 	
 	@SubscribeEvent
@@ -52,6 +60,15 @@ public class CartBlanche {
 		for (ItemModMinecart.Type type: ItemModMinecart.Type.values()) {
 			if (type.config.getAsBoolean()) {
 				proxy.registerItemRenderer(ModItems.mod_minecart, type.ordinal(), "mod_minecart_"+type.toString().toLowerCase(Locale.US));
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+		if (Config.beacon_cart) {
+			for (int i=1; i<=8; ++i) {
+				event.getRegistry().register(new BeaconCartLevelRecipe(i));
 			}
 		}
 	}

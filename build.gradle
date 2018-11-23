@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0.1.1"
+version = "1.0.2.0"
 group= "landmaster.cartblanche" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "cartblanche"
 
@@ -67,6 +67,9 @@ dependencies {
 	// for more info...
 	// http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
 	// http://www.gradle.org/docs/current/userguide/dependency_management.html
+	
+	deobfCompile "mezz.jei:jei_1.12.2:4.13.1.225:api"
+    runtime "mezz.jei:jei_1.12.2:4.13.1.225"
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens

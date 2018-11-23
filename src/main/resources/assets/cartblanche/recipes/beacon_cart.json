@@ -3,7 +3,7 @@
 	"conditions": [
 		{
 			"type": "cartblanche:minecart_enabled",
-			"minecart": "ENDER_CHEST"
+			"minecart": "BEACON"
 		}
 	],
 	"pattern": [
@@ -12,7 +12,7 @@
 	],
 	"key": {
 		"A": {
-			"item": "minecraft:ender_chest"
+			"item": "minecraft:beacon"
 		},
 		"B": {
 			"item": "minecraft:minecart"
@@ -20,6 +20,6 @@
 	},
 	"result": {
 		"item": "cartblanche:mod_minecart",
-		"data": 0
+		"data": 2
 	}
 }

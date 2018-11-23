@@ -1,5 +1,12 @@
 item.mod_minecart.ender_chest.name=Ender Chest Cart
 item.mod_minecart.jukebox.name=Jukebox Cart
+item.mod_minecart.beacon.name=Beacon Cart
 
 entity.EnderChestCart.name=Ender Chest Cart
 entity.JukeboxCart.name=Jukebox Cart
+entity.BeaconCart.name=Beacon Cart
+
+tooltip.beacon_cart_num_blocks.name=Number of beacon base blocks: %d
+tooltip.beacon_cart_level.name=Beacon level: %d
+tooltip.beacon_cart_blocks_until.name=Beacon base blocks until next level: %d
+tooltip.beacon_cart_instructions.name=Craft with one or more beacon base blocks to increase the level!
