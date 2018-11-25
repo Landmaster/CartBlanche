@@ -1,10 +1,26 @@
 item.mod_minecart.ender_chest.name=Ender Chest Cart
 item.mod_minecart.jukebox.name=Jukebox Cart
 item.mod_minecart.beacon.name=Beacon Cart
+item.mod_minecart.iron_chest_iron.name=Iron Chest Cart
+item.mod_minecart.iron_chest_gold.name=Gold Chest Cart
+item.mod_minecart.iron_chest_diamond.name=Diamond Chest Cart
+item.mod_minecart.iron_chest_copper.name=Copper Chest Cart
+item.mod_minecart.iron_chest_silver.name=Silver Chest Cart
+item.mod_minecart.iron_chest_crystal.name=Crystal Chest Cart
+item.mod_minecart.iron_chest_obsidian.name=Obsidian Chest Cart
+item.mod_minecart.iron_chest_dirtchest9000.name=Dirt Chest 9000 Cart
 
 entity.EnderChestCart.name=Ender Chest Cart
 entity.JukeboxCart.name=Jukebox Cart
 entity.BeaconCart.name=Beacon Cart
+entity.IronChestCart.iron.name=Iron Chest Cart
+entity.IronChestCart.gold.name=Gold Chest Cart
+entity.IronChestCart.diamond.name=Diamond Chest Cart
+entity.IronChestCart.copper.name=Copper Chest Cart
+entity.IronChestCart.silver.name=SIlver Chest Cart
+entity.IronChestCart.crystal.name=Crystal Chest Cart
+entity.IronChestCart.obsidian.name=Obsidian Chest Cart
+entity.IronChestCart.dirtchest9000.name=Dirt Chest 9000 Cart
 
 tooltip.beacon_cart_num_blocks.name=Number of beacon base blocks: %d
 tooltip.beacon_cart_level.name=Beacon level: %d

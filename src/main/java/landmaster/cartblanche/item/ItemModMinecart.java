@@ -1,13 +1,16 @@
 package landmaster.cartblanche.item;
 
 import java.util.*;
+import java.util.Locale;
 import java.util.function.*;
 import java.util.stream.*;
 
 import javax.annotation.*;
 
+import cpw.mods.ironchest.common.blocks.chest.IronChestType;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
+import landmaster.cartblanche.util.IronChestStuff;
 import net.minecraft.advancements.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.*;
@@ -34,12 +37,9 @@ public class ItemModMinecart extends ItemMinecart {
 		ENDER_CHEST((IReducedMinecartFactory)EntityEnderChestCart::new, () -> Config.ender_chest_cart),
 		JUKEBOX((IReducedMinecartFactory)EntityJukeboxCart::new, () -> Config.jukebox_cart),
 		BEACON((worldIn, x, y, z, stack) -> new EntityBeaconCart(worldIn,x,y,z)
-				.setBeaconMaterials(
-						StreamSupport.stream(stack.getTagCompound().getTagList("BeaconMaterials", 10).spliterator(), false)
-						.map(nbt -> (NBTTagCompound)nbt)
-						.map(ItemStack::new)
-						.collect(Collectors.toList())
-						), () -> Config.beacon_cart);
+				.setBeaconMaterials(ModItems.mod_minecart.getBeaconMaterials(stack)), () -> Config.beacon_cart),
+		IRON_CHEST((worldIn, x, y, z, stack) -> new EntityIronChestCart(worldIn,x,y,z)
+				.setChestType(ModItems.mod_minecart.getIronChestType(stack)), () -> Config.iron_chest_cart);
 		
 		public final IMinecartFactory factory;
 		public final BooleanSupplier config;
@@ -172,6 +172,15 @@ public class ItemModMinecart extends ItemMinecart {
 		.collect(Collectors.toList());
 	}
 	
+	public int getIronChestType(ItemStack stack) {
+		if (!stack.hasTagCompound()) return 0;
+		return stack.getTagCompound().getInteger("IronChestType");
+	}
+	
+	public String getIronChestTypeString(ItemStack stack) {
+		return IronChestType.values()[getIronChestType(stack)].name();
+	}
+	
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -231,6 +240,14 @@ public class ItemModMinecart extends ItemMinecart {
 							subItems.add(stack.copy());
 							numBlocks += (2*lev+3)*(2*lev+3);
 						}
+					} else if (type == Type.IRON_CHEST) {
+						ItemStack stack = new ItemStack(this, 1, type.ordinal());
+						for (int ictype: IronChestStuff.getIronChestTypes()) {
+							NBTTagCompound compound = new NBTTagCompound();
+							compound.setInteger("IronChestType", ictype);
+							stack.setTagCompound(compound);
+							subItems.add(stack.copy());
+						}
 					} else {
 						subItems.add(new ItemStack(this, 1, type.ordinal()));
 					}
@@ -241,8 +258,11 @@ public class ItemModMinecart extends ItemMinecart {
 	
 	@Override
 	public String getTranslationKey(ItemStack stack) {
+		if (stack.getMetadata() == Type.IRON_CHEST.ordinal()) {
+			return super.getTranslationKey(stack) + ".iron_chest_" + this.getIronChestTypeString(stack).toLowerCase(Locale.US);
+		}
 		return super.getTranslationKey(stack) + "."
-				+ Type.values()[stack.getMetadata()].toString().toLowerCase(java.util.Locale.US);
+				+ Type.values()[stack.getMetadata()].toString().toLowerCase(Locale.US);
 	}
 	
 	/**

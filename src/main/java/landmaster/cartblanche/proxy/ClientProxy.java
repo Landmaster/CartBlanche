@@ -1,5 +1,7 @@
 package landmaster.cartblanche.proxy;
 
+import java.util.function.*;
+
 import landmaster.cartblanche.api.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
@@ -10,8 +12,7 @@ import net.minecraft.client.audio.*;
 import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.client.renderer.entity.*;
 import net.minecraft.item.*;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.fml.client.registry.*;
 
@@ -26,6 +27,9 @@ public class ClientProxy extends CommonProxy {
 		}
 		if (Config.beacon_cart) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityBeaconCart.class, RenderBeaconCart::new);
+		}
+		if (Config.iron_chest_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityIronChestCart.class, RenderIronChestCart::new);
 		}
 	}
 	
@@ -43,6 +47,12 @@ public class ClientProxy extends CommonProxy {
 			ModelLoader.setCustomMeshDefinition(item, stack -> rl);
 			ModelBakery.registerItemVariants(item, rl);
 		}
+	}
+	
+	@Override
+	public void registerItemRenderer(Item item, Function<ItemStack, ModelResourceLocation> mapper, ResourceLocation...locs) {
+		ModelLoader.setCustomMeshDefinition(item, mapper::apply);
+		ModelBakery.registerItemVariants(item, locs);
 	}
 	
 	@Override

@@ -77,12 +77,10 @@ public class EntityEnderChestCart extends EntityMinecartContainer {
 		return capability != CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && super.hasCapability(capability, facing);
 	}
 	
-	private static final MethodHandles.Lookup lookup;
 	private static final MethodHandle processInitialInteractHandle;
 	static {
 		try {
-			lookup = Utils.getImplLookup();
-			processInitialInteractHandle = lookup.findSpecial(EntityMinecart.class, "func_184230_a",
+			processInitialInteractHandle = Utils.IMPL_LOOKUP.findSpecial(EntityMinecart.class, "func_184230_a",
 					MethodType.methodType(boolean.class, EntityPlayer.class, EnumHand.class),
 					EntityMinecartContainer.class);
 		} catch (Throwable e) {

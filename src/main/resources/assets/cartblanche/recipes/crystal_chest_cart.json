@@ -1,0 +1,29 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"conditions": [
+		{
+			"type": "cartblanche:minecart_enabled",
+			"minecart": "IRON_CHEST"
+		}
+	],
+	"pattern": [
+		"A",
+		"B"
+	],
+	"key": {
+		"A": {
+			"item": "ironchest:iron_chest",
+			"data": 5
+		},
+		"B": {
+			"item": "minecraft:minecart"
+		}
+	},
+	"result": {
+		"item": "cartblanche:mod_minecart",
+		"data": 3,
+		"nbt": {
+			"IronChestType": 5
+		}
+	}
+}

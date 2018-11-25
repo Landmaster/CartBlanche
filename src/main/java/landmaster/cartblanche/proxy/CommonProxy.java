@@ -1,7 +1,11 @@
 package landmaster.cartblanche.proxy;
 
-import landmaster.cartblanche.entity.EntityJukeboxCart;
+import java.util.function.*;
+
+import landmaster.cartblanche.entity.*;
+import net.minecraft.client.renderer.block.model.*;
 import net.minecraft.item.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 
@@ -15,5 +19,7 @@ public class CommonProxy {
 	}
 	public boolean isSoundPlaying(Object sound) {
 		return false;
+	}
+	public void registerItemRenderer(Item item, Function<ItemStack, ModelResourceLocation> mapper, ResourceLocation...locs) {
 	}
 }

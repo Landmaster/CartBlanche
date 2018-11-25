@@ -7,6 +7,6 @@ public class ModInfo {
 	public static final String VERSION = "@VERSION@";
 	
 	// TODO add dependencies when needed
-	public static final String DEPENDS = "after:jei@[4.13,);";
+	public static final String DEPENDS = "after:jei@[4.13,);after:ironchest;";
 	
 }
