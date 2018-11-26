@@ -1,12 +1,10 @@
 package landmaster.cartblanche.util;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IInteractionObject;
+import net.minecraft.entity.player.*;
+import net.minecraft.inventory.*;
+import net.minecraft.item.*;
+import net.minecraft.util.text.*;
+import net.minecraft.world.*;
 
 public class InventoryInteractionObject implements IInteractionObject, IInventory {
 	private IInventory inv;

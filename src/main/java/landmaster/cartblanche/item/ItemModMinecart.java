@@ -39,7 +39,8 @@ public class ItemModMinecart extends ItemMinecart {
 		BEACON((worldIn, x, y, z, stack) -> new EntityBeaconCart(worldIn,x,y,z)
 				.setBeaconMaterials(ModItems.mod_minecart.getBeaconMaterials(stack)), () -> Config.beacon_cart),
 		IRON_CHEST((worldIn, x, y, z, stack) -> new EntityIronChestCart(worldIn,x,y,z)
-				.setChestType(ModItems.mod_minecart.getIronChestType(stack)), () -> Config.iron_chest_cart);
+				.setChestType(ModItems.mod_minecart.getIronChestType(stack)), () -> Config.iron_chest_cart),
+		NETHER_CHEST((IReducedMinecartFactory)EntityNetherChestCart::new, () -> Config.nether_chest_cart);
 		
 		public final IMinecartFactory factory;
 		public final BooleanSupplier config;

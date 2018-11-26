@@ -9,6 +9,7 @@ public class Config extends Configuration {
 	public static boolean jukebox_cart;
 	public static boolean beacon_cart;
 	public static boolean iron_chest_cart;
+	public static boolean nether_chest_cart;
 	
 	public Config(FMLPreInitializationEvent event) {
 		super(event.getSuggestedConfigurationFile());
@@ -20,6 +21,8 @@ public class Config extends Configuration {
 		beacon_cart = this.getBoolean("beacon_cart", "carts", true, "Enable the Beacon Cart");
 		iron_chest_cart = this.getBoolean("iron_chest_cart", "carts", true, "Enable the Iron Chest Cart (Iron Chests mod must be present)")
 				&& Loader.isModLoaded("ironchest");
+		nether_chest_cart = this.getBoolean("nether_chest_cart", "carts", true, "Enable the Nether Chest Cart (Nether Chest mod must be present)")
+				&& Loader.isModLoaded("netherchest");
 	}
 	
 	public void update() {

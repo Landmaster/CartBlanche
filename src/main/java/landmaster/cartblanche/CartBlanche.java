@@ -59,6 +59,9 @@ public class CartBlanche {
 		if (Config.iron_chest_cart) {
 			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "iron_chest_cart"), EntityIronChestCart.class, "IronChestCart", 3, INSTANCE, 256, 2, true);
 		}
+		if (Config.nether_chest_cart) {
+			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "nether_chest_cart"), EntityNetherChestCart.class, "NetherChestCart", 4, INSTANCE, 256, 2, true);
+		}
 		proxy.initEntityRendering();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new CBGuiHandler());

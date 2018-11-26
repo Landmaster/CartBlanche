@@ -14,10 +14,9 @@ import net.minecraft.entity.item.*;
 import net.minecraft.entity.player.*;
 import net.minecraft.inventory.*;
 import net.minecraft.nbt.*;
-import net.minecraft.util.*;
 import net.minecraft.world.*;
 import net.minecraftforge.common.*;
-import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.entity.minecart.*;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.gameevent.*;
 
@@ -27,17 +26,17 @@ public class IronChestStuff {
 	}
 	
 	@SubscribeEvent
-	public static void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		if (event.getWorld().isRemote) {
+	public static void onEntityInteract(MinecartInteractEvent event) {
+		if (event.getMinecart().world.isRemote) {
 			return;
 		}
 		
-		if (event.getItemStack().getItem() instanceof ItemChestChanger) {
+		if (event.getItem().getItem() instanceof ItemChestChanger) {
 			boolean worked = false;
 			
-			ItemChestChanger changer = (ItemChestChanger)event.getItemStack().getItem();
-			if (changer.type.canUpgrade(IronChestType.WOOD) && event.getTarget() instanceof EntityMinecartChest) {
-				EntityMinecartChest oldCart = (EntityMinecartChest)event.getTarget();
+			ItemChestChanger changer = (ItemChestChanger)event.getItem().getItem();
+			if (changer.type.canUpgrade(IronChestType.WOOD) && event.getMinecart() instanceof EntityMinecartChest) {
+				EntityMinecartChest oldCart = (EntityMinecartChest)event.getMinecart();
 				oldCart.setDropItemsWhenDead(false);
 				
 				EntityIronChestCart newCart = new EntityIronChestCart(oldCart.world);
@@ -47,20 +46,20 @@ public class IronChestStuff {
 				compound.setInteger("IronChestType", changer.type.target.ordinal());
 				newCart.readFromNBT(compound);
 				
-				event.getWorld().removeEntity(oldCart);
+				oldCart.world.removeEntity(oldCart);
 				MinecraftForge.EVENT_BUS.register(new Object() {
 					@SubscribeEvent
-					public void onWorldTick(TickEvent.WorldTickEvent event0) {
-						if (event.getWorld() instanceof WorldServer
-								&& ((WorldServer)event.getWorld()).getEntityFromUuid(oldCart.getUniqueID()) == null) {
-							event.getWorld().spawnEntity(newCart);
+					public void onServerTick(TickEvent.ServerTickEvent event0) {
+						if (oldCart.world instanceof WorldServer
+								&& ((WorldServer)oldCart.world).getEntityFromUuid(oldCart.getUniqueID()) == null) {
+							oldCart.world.spawnEntity(newCart);
 							MinecraftForge.EVENT_BUS.unregister(this);
 						}
 					}
 				});
 				worked = true;
-			} else if (event.getTarget() instanceof EntityIronChestCart) {
-				EntityIronChestCart cart = (EntityIronChestCart)event.getTarget();
+			} else if (event.getMinecart() instanceof EntityIronChestCart) {
+				EntityIronChestCart cart = (EntityIronChestCart)event.getMinecart();
 				if (changer.type.canUpgrade(cart.getChestType())) {
 					cart.setChestType(changer.type.target);
 					worked = true;
@@ -68,11 +67,10 @@ public class IronChestStuff {
 			}
 			
 			if (worked) {
-				if (!event.getEntityPlayer().capabilities.isCreativeMode) {
-					event.getItemStack().shrink(1);
+				if (!event.getPlayer().capabilities.isCreativeMode) {
+					event.getItem().shrink(1);
 				}
 				
-				event.setCancellationResult(EnumActionResult.SUCCESS);
 				event.setCanceled(true);
 			}
 		}

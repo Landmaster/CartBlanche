@@ -1,0 +1,25 @@
+{
+	"type": "minecraft:crafting_shaped",
+	"conditions": [
+		{
+			"type": "cartblanche:minecart_enabled",
+			"minecart": "NETHER_CHEST"
+		}
+	],
+	"pattern": [
+		"A",
+		"B"
+	],
+	"key": {
+		"A": {
+			"item": "netherchest:nether_chest"
+		},
+		"B": {
+			"item": "minecraft:minecart"
+		}
+	},
+	"result": {
+		"item": "cartblanche:mod_minecart",
+		"data": 4
+	}
+}

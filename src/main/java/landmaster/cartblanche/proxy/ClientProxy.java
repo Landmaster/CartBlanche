@@ -31,6 +31,9 @@ public class ClientProxy extends CommonProxy {
 		if (Config.iron_chest_cart) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityIronChestCart.class, RenderIronChestCart::new);
 		}
+		if (Config.nether_chest_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityNetherChestCart.class, RenderNetherChestCart::new);
+		}
 	}
 	
 	@Override

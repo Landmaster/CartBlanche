@@ -9,6 +9,7 @@ item.mod_minecart.iron_chest_silver.name=Silver Chest Cart
 item.mod_minecart.iron_chest_crystal.name=Crystal Chest Cart
 item.mod_minecart.iron_chest_obsidian.name=Obsidian Chest Cart
 item.mod_minecart.iron_chest_dirtchest9000.name=Dirt Chest 9000 Cart
+item.mod_minecart.nether_chest.name=Nether Chest Cart
 
 entity.EnderChestCart.name=Ender Chest Cart
 entity.JukeboxCart.name=Jukebox Cart
@@ -21,6 +22,7 @@ entity.IronChestCart.silver.name=SIlver Chest Cart
 entity.IronChestCart.crystal.name=Crystal Chest Cart
 entity.IronChestCart.obsidian.name=Obsidian Chest Cart
 entity.IronChestCart.dirtchest9000.name=Dirt Chest 9000 Cart
+entity.NetherChestCart.name=Nether Chest Cart
 
 tooltip.beacon_cart_num_blocks.name=Number of beacon base blocks: %d
 tooltip.beacon_cart_level.name=Beacon level: %d

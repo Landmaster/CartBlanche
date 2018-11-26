@@ -18,6 +18,8 @@ import net.minecraft.tileentity.*;
 import net.minecraft.util.*;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
+import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.items.*;
 import net.minecraftforge.items.wrapper.*;
 
 public class EntityBeaconCart extends EntityMinecartContainer implements ISidedInventory {
@@ -310,9 +312,8 @@ public class EntityBeaconCart extends EntityMinecartContainer implements ISidedI
 	@SuppressWarnings("unchecked")
 	@Override
 	@Nullable
-	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability,
-			@Nullable net.minecraft.util.EnumFacing facing) {
-		if (capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+		if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
 			return (T) new SidedInvWrapper(this, facing);
 		}
 		return super.getCapability(capability, facing);

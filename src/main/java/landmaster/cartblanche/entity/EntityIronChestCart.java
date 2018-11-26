@@ -29,17 +29,6 @@ public class EntityIronChestCart extends EntityMinecartContainer {
 	private static final DataParameter<Integer> IRON_CHEST_TYPE = EntityDataManager.createKey(EntityJukeboxCart.class,
 			DataSerializers.VARINT);
 	
-	private static final MethodHandle minecartContainerItemsHandle;
-	static {
-		try {
-			minecartContainerItemsHandle = Utils.IMPL_LOOKUP.findSetter(EntityMinecartContainer.class, "field_94113_a",
-					NonNullList.class);
-		} catch (Throwable e) {
-			Throwables.throwIfUnchecked(e);
-			throw new RuntimeException(e);
-		}
-	}
-	
 	private static final int IRON_CHEST_TYPE_UNINIT = (int) Byte.MAX_VALUE;
 	
 	@Override
@@ -54,27 +43,20 @@ public class EntityIronChestCart extends EntityMinecartContainer {
 	
 	public EntityIronChestCart(World worldIn) {
 		super(worldIn);
-		upsizeInv();
-		topStacks = NonNullList.withSize(8, ItemStack.EMPTY);
+		this.init();
 	}
 	
 	public EntityIronChestCart(World worldIn, double x, double y, double z) {
 		super(worldIn, x, y, z);
-		upsizeInv();
-		topStacks = NonNullList.withSize(8, ItemStack.EMPTY);
+		this.init();
 	}
 	
 	private static final int MAX_IRON_CHEST_SIZE = Arrays.stream(IronChestStuff.getIronChestTypes())
 			.mapToObj(val -> IronChestType.VALUES[val]).mapToInt(ch -> ch.size).max().orElse(0);
 	
-	private void upsizeInv() {
-		try {
-			minecartContainerItemsHandle.invokeExact((EntityMinecartContainer) this,
-					NonNullList.withSize(MAX_IRON_CHEST_SIZE, ItemStack.EMPTY));
-		} catch (Throwable e) {
-			Throwables.throwIfUnchecked(e);
-			throw new RuntimeException(e);
-		}
+	private void init() {
+		this.minecartContainerItems = NonNullList.withSize(MAX_IRON_CHEST_SIZE, ItemStack.EMPTY);
+		topStacks = NonNullList.withSize(8, ItemStack.EMPTY);
 	}
 	
 	@Override
