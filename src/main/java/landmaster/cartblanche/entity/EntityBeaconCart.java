@@ -33,14 +33,15 @@ public class EntityBeaconCart extends EntityMinecartContainer implements ISidedI
 	
 	private boolean isComplete;
 	
-	private static final DataParameter<Integer> LEVELS = EntityDataManager.createKey(EntityJukeboxCart.class, DataSerializers.VARINT);
-	private static final int LEVELS_UNINIT = (int)Byte.MAX_VALUE;
+	private static final DataParameter<Integer> LEVELS = EntityDataManager.createKey(EntityJukeboxCart.class,
+			DataSerializers.VARINT);
+	private static final int LEVELS_UNINIT = (int) Byte.MAX_VALUE;
 	
 	@Override
-    protected void entityInit() {
-        super.entityInit();
-        this.getDataManager().register(LEVELS, LEVELS_UNINIT);
-    }
+	protected void entityInit() {
+		super.entityInit();
+		this.getDataManager().register(LEVELS, LEVELS_UNINIT);
+	}
 	
 	public EntityBeaconCart(World worldIn) {
 		super(worldIn);

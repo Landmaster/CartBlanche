@@ -6,6 +6,8 @@ import landmaster.cartblanche.api.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
 import landmaster.cartblanche.entity.render.*;
+import landmaster.cartblanche.item.ItemModMinecart;
+import landmaster.cartblanche.item.ModItems;
 import landmaster.cartblanche.sound.*;
 import net.minecraft.client.*;
 import net.minecraft.client.audio.*;
@@ -33,6 +35,9 @@ public class ClientProxy extends CommonProxy {
 		}
 		if (Config.nether_chest_cart) {
 			RenderingRegistry.registerEntityRenderingHandler(EntityNetherChestCart.class, RenderNetherChestCart::new);
+		}
+		if (Config.banner_cart) {
+			RenderingRegistry.registerEntityRenderingHandler(EntityBannerCart.class, RenderBannerCart::new);
 		}
 	}
 	
@@ -80,4 +85,18 @@ public class ClientProxy extends CommonProxy {
 			Minecraft.getMinecraft().getSoundHandler().stopSound((ISound)sound);
 		}
 	};
+	
+	@Override
+	public void registerColors() {
+		if (Config.banner_cart) {
+			Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, idx) -> {
+				if (stack.getMetadata() == ItemModMinecart.Type.BANNER.ordinal()) {
+					if (idx == 1) {
+						return ModItems.mod_minecart.getBannerBaseColor(stack).getColorValue();
+					}
+				}
+				return 0xFFFFFF;
+			}, ModItems.mod_minecart);
+		}
+	}
 }

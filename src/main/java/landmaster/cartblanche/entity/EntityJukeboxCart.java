@@ -27,37 +27,20 @@ public class EntityJukeboxCart extends EntityMinecart {
 		}
 		
 		@Override
-		protected void onContentsChanged(int slot) {
-			super.onContentsChanged(slot);
-			/*
-			if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-				synchronized (soundMap) {
-					ItemStack stack = this.getStackInSlot(0);
-					if (!EntityJukeboxCart.this.getDataManager().get(DISABLED)
-							&& !stack.isEmpty()
-							&& stack.getItem() instanceof ItemRecord
-							&& !soundMap.containsKey(EntityJukeboxCart.this.getEntityId())) {
-						Object sound = CartBlanche.proxy.playJukeboxCartSound(((ItemRecord)stack.getItem()).getSound(), SoundCategory.MUSIC, EntityJukeboxCart.this);
-						soundMap.put(EntityJukeboxCart.this.getEntityId(), sound);
-					}
-				}
-			}*/
-		}
-		
-		@Override
 		protected int getStackLimit(int slot, @Nonnull ItemStack stack) {
 			return 1;
 		}
 	};
 	
-	private static final DataParameter<Boolean> DISABLED = EntityDataManager.createKey(EntityJukeboxCart.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> DISABLED = EntityDataManager.createKey(EntityJukeboxCart.class,
+			DataSerializers.BOOLEAN);
 	private static final Map<Integer, Object> soundMap = new MapMaker().weakValues().makeMap();
 	
 	@Override
-    protected void entityInit() {
-        super.entityInit();
-        this.getDataManager().register(DISABLED, false);
-    }
+	protected void entityInit() {
+		super.entityInit();
+		this.getDataManager().register(DISABLED, false);
+	}
 	
 	public EntityJukeboxCart(World worldIn) {
 		super(worldIn);
@@ -125,7 +108,9 @@ public class EntityJukeboxCart extends EntityMinecart {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
-	public boolean isDisabled() { return this.getDataManager().get(DISABLED); }
+	public boolean isDisabled() {
+		return this.getDataManager().get(DISABLED);
+	}
 	
 	public void removeSound(Object sound) {
 		soundMap.remove(this.getEntityId(), sound);
@@ -138,21 +123,15 @@ public class EntityJukeboxCart extends EntityMinecart {
 		synchronized (soundMap) {
 			if (this.world.isRemote) {
 				ItemStack stack = this.record.getStackInSlot(0);
-				if (!EntityJukeboxCart.this.getDataManager().get(DISABLED)
-						&& !stack.isEmpty()
+				if (!EntityJukeboxCart.this.getDataManager().get(DISABLED) && !stack.isEmpty()
 						&& stack.getItem() instanceof ItemRecord
 						&& !soundMap.containsKey(EntityJukeboxCart.this.getEntityId())) {
-					Object sound = CartBlanche.proxy.playJukeboxCartSound(((ItemRecord)stack.getItem()).getSound(), SoundCategory.MUSIC, EntityJukeboxCart.this);
+					Object sound = CartBlanche.proxy.playJukeboxCartSound(((ItemRecord) stack.getItem()).getSound(),
+							SoundCategory.MUSIC, EntityJukeboxCart.this);
 					soundMap.put(EntityJukeboxCart.this.getEntityId(), sound);
 				}
 			}
 		}
-		/*
-		if (this.world.isRemote) {
-			if (!CartBlanche.proxy.isSoundPlaying(soundMap.get(this.getEntityId()))) {
-				soundMap.remove(this.getEntityId());
-			}
-		}*/
 	}
 	
 	@Override

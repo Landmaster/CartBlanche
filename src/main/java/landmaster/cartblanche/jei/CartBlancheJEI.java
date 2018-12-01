@@ -12,5 +12,6 @@ public class CartBlancheJEI implements IModPlugin {
 		CartBlanche.log.debug("Adding JEI integration for Cart Blanche");
 		
 		registry.handleRecipes(BeaconCartLevelRecipe.class, BeaconCartLevelRecipeJEI::new, VanillaRecipeCategoryUid.CRAFTING);
+		registry.handleRecipes(BannerCartRecipe.class, BannerCartRecipeJEI::new, VanillaRecipeCategoryUid.CRAFTING);
 	}
 }

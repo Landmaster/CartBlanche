@@ -1,0 +1,6 @@
+{
+	"parent": "item/minecart",
+	"textures": {
+		"layer1": "cartblanche:items/minecart_banner_overlay"
+	}
+}

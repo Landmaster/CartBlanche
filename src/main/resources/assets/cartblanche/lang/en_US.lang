@@ -10,6 +10,7 @@ item.mod_minecart.iron_chest_crystal.name=Crystal Chest Cart
 item.mod_minecart.iron_chest_obsidian.name=Obsidian Chest Cart
 item.mod_minecart.iron_chest_dirtchest9000.name=Dirt Chest 9000 Cart
 item.mod_minecart.nether_chest.name=Nether Chest Cart
+item.mod_minecart.banner.name=Banner Cart
 
 entity.EnderChestCart.name=Ender Chest Cart
 entity.JukeboxCart.name=Jukebox Cart
@@ -23,8 +24,10 @@ entity.IronChestCart.crystal.name=Crystal Chest Cart
 entity.IronChestCart.obsidian.name=Obsidian Chest Cart
 entity.IronChestCart.dirtchest9000.name=Dirt Chest 9000 Cart
 entity.NetherChestCart.name=Nether Chest Cart
+entity.BannerCart.name=Banner Cart
 
 tooltip.beacon_cart_num_blocks.name=Number of beacon base blocks: %d
 tooltip.beacon_cart_level.name=Beacon level: %d
 tooltip.beacon_cart_blocks_until.name=Beacon base blocks until next level: %d
 tooltip.beacon_cart_instructions.name=Craft with one or more beacon base blocks to increase the level!
+tooltip.banner_cart_instructions.name=The banner pattern(s) on the cart will match those of the banner used to craft it.

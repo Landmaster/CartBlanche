@@ -34,12 +34,6 @@ public class RenderIronChestCart extends RenderMinecart<EntityIronChestCart> {
 	}
 	
 	@Override
-	public void doRender(EntityIronChestCart entity, double x, double y, double z, float entityYaw,
-			float partialTicks) {
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-	}
-	
-	@Override
 	protected void renderCartContents(EntityIronChestCart entity, float partialTicks, IBlockState p_188319_3_) {
 		super.renderCartContents(entity, partialTicks, p_188319_3_);
 		

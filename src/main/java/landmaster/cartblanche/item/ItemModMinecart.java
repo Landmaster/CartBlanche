@@ -7,10 +7,12 @@ import java.util.stream.*;
 
 import javax.annotation.*;
 
-import cpw.mods.ironchest.common.blocks.chest.IronChestType;
+import com.google.common.collect.*;
+
+import cpw.mods.ironchest.common.blocks.chest.*;
 import landmaster.cartblanche.config.*;
 import landmaster.cartblanche.entity.*;
-import landmaster.cartblanche.util.IronChestStuff;
+import landmaster.cartblanche.util.*;
 import net.minecraft.advancements.*;
 import net.minecraft.block.*;
 import net.minecraft.block.material.*;
@@ -40,7 +42,10 @@ public class ItemModMinecart extends ItemMinecart {
 				.setBeaconMaterials(ModItems.mod_minecart.getBeaconMaterials(stack)), () -> Config.beacon_cart),
 		IRON_CHEST((worldIn, x, y, z, stack) -> new EntityIronChestCart(worldIn,x,y,z)
 				.setChestType(ModItems.mod_minecart.getIronChestType(stack)), () -> Config.iron_chest_cart),
-		NETHER_CHEST((IReducedMinecartFactory)EntityNetherChestCart::new, () -> Config.nether_chest_cart);
+		NETHER_CHEST((IReducedMinecartFactory)EntityNetherChestCart::new, () -> Config.nether_chest_cart),
+		BANNER((worldIn, x, y, z, stack) -> new EntityBannerCart(worldIn,x,y,z)
+				.setBaseColor(ModItems.mod_minecart.getBannerBaseColor(stack))
+				.setPatterns(ModItems.mod_minecart.getPatterns(stack)), () -> Config.banner_cart);
 		
 		public final IMinecartFactory factory;
 		public final BooleanSupplier config;
@@ -182,6 +187,17 @@ public class ItemModMinecart extends ItemMinecart {
 		return IronChestType.values()[getIronChestType(stack)].name();
 	}
 	
+	public EnumDyeColor getBannerBaseColor(ItemStack stack) {
+		if (!stack.hasTagCompound()) return EnumDyeColor.BLACK;
+		return EnumDyeColor.byDyeDamage(stack.getTagCompound().getInteger("Base"));
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public NBTTagCompound[] getPatterns(ItemStack stack) {
+		if (!stack.hasTagCompound()) return new NBTTagCompound[0];
+		return Iterables.toArray((Iterable)stack.getTagCompound().getTagList("Patterns", 10), NBTTagCompound.class);
+	}
+	
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
@@ -193,6 +209,15 @@ public class ItemModMinecart extends ItemMinecart {
 				tooltip.add(TextFormatting.GREEN+I18n.format("tooltip.beacon_cart_blocks_until.name", getNumBlocksFromLevel(levels+1) - numBlocks));
 				tooltip.add(TextFormatting.RED+I18n.format("tooltip.beacon_cart_instructions.name"));
 			}
+		} else if (stack.getMetadata() == Type.BANNER.ordinal()) {
+			ItemStack temp = stack.copy();
+			NBTTagCompound subCompound = new NBTTagCompound();
+			if (temp.getTagCompound().hasKey("Patterns", 9)) {
+				subCompound.setTag("Patterns", temp.getTagCompound().getTag("Patterns"));
+			}
+			temp.getTagCompound().setTag("BlockEntityTag", subCompound);
+			tooltip.add(TextFormatting.RED+I18n.format("tooltip.banner_cart_instructions.name"));
+			ItemBanner.appendHoverTextFromTileEntityTag(temp, tooltip);
 		}
 	}
 	
@@ -246,6 +271,14 @@ public class ItemModMinecart extends ItemMinecart {
 						for (int ictype: IronChestStuff.getIronChestTypes()) {
 							NBTTagCompound compound = new NBTTagCompound();
 							compound.setInteger("IronChestType", ictype);
+							stack.setTagCompound(compound);
+							subItems.add(stack.copy());
+						}
+					} else if (type == Type.BANNER) {
+						ItemStack stack = new ItemStack(this, 1, type.ordinal());
+						for (EnumDyeColor color: EnumDyeColor.values()) {
+							NBTTagCompound compound = new NBTTagCompound();
+							compound.setInteger("Base", color.getDyeDamage());
 							stack.setTagCompound(compound);
 							subItems.add(stack.copy());
 						}

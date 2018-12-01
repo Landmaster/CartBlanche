@@ -22,4 +22,5 @@ public class CommonProxy {
 	}
 	public void registerItemRenderer(Item item, Function<ItemStack, ModelResourceLocation> mapper, ResourceLocation...locs) {
 	}
+	public void registerColors() {}
 }

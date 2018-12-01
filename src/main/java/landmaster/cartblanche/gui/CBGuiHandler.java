@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.network.*;
 
 public class CBGuiHandler implements IGuiHandler {
 	public static final int IRON_CHEST = 0;
-	public static final int NETHER_CHEST = 1; // TODO implement nether chest GUI
+	public static final int NETHER_CHEST = 1;
 	
 	@Override
 	public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

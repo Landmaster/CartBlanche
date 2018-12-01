@@ -62,6 +62,9 @@ public class CartBlanche {
 		if (Config.nether_chest_cart) {
 			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "nether_chest_cart"), EntityNetherChestCart.class, "NetherChestCart", 4, INSTANCE, 256, 2, true);
 		}
+		if (Config.banner_cart) {
+			EntityRegistry.registerModEntity(new ResourceLocation(ModInfo.MODID, "banner_cart"), EntityBannerCart.class, "BannerCart", 5, INSTANCE, 256, 2, true);
+		}
 		proxy.initEntityRendering();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new CBGuiHandler());
@@ -104,11 +107,14 @@ public class CartBlanche {
 				event.getRegistry().register(new BeaconCartLevelRecipe(i));
 			}
 		}
+		if (Config.banner_cart) {
+			event.getRegistry().register(new BannerCartRecipe());
+		}
 	}
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		
+		proxy.registerColors();
 	}
 	
 	@EventHandler
