@@ -212,12 +212,13 @@ public class ItemModMinecart extends ItemMinecart {
 		} else if (stack.getMetadata() == Type.BANNER.ordinal()) {
 			ItemStack temp = stack.copy();
 			NBTTagCompound subCompound = new NBTTagCompound();
-			if (temp.getTagCompound().hasKey("Patterns", 9)) {
+			if (temp.hasTagCompound() && temp.getTagCompound().hasKey("Patterns", 9)) {
 				subCompound.setTag("Patterns", temp.getTagCompound().getTag("Patterns"));
+				temp.getTagCompound().setTag("BlockEntityTag", subCompound);
 			}
-			temp.getTagCompound().setTag("BlockEntityTag", subCompound);
-			tooltip.add(TextFormatting.RED+I18n.format("tooltip.banner_cart_instructions.name"));
 			ItemBanner.appendHoverTextFromTileEntityTag(temp, tooltip);
+			tooltip.add(TextFormatting.RED+I18n.format("tooltip.banner_cart_instructions.name"));
+			tooltip.add(TextFormatting.AQUA+I18n.format("tooltip.banner_cart_rotate.name"));
 		}
 	}
 	
@@ -294,6 +295,9 @@ public class ItemModMinecart extends ItemMinecart {
 	public String getTranslationKey(ItemStack stack) {
 		if (stack.getMetadata() == Type.IRON_CHEST.ordinal()) {
 			return super.getTranslationKey(stack) + ".iron_chest_" + this.getIronChestTypeString(stack).toLowerCase(Locale.US);
+		}
+		if (stack.getMetadata() == Type.BANNER.ordinal()) {
+			return super.getTranslationKey(stack) + ".banner_" + this.getBannerBaseColor(stack).getName();
 		}
 		return super.getTranslationKey(stack) + "."
 				+ Type.values()[stack.getMetadata()].toString().toLowerCase(Locale.US);
