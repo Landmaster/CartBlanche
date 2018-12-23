@@ -4,6 +4,7 @@ import java.util.*;
 
 import landmaster.cartblanche.item.*;
 import net.minecraft.block.*;
+import net.minecraft.block.state.*;
 import net.minecraft.inventory.*;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.*;
@@ -28,6 +29,14 @@ public class BeaconCartLevelRecipe extends Impl<IRecipe> implements IRecipe {
 	}
 	
 	@SuppressWarnings("deprecation")
+	private static IBlockState blockFromStack(ItemStack stack) {
+		try {
+			return Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		ItemStack beaconCart = ItemStack.EMPTY;
@@ -44,7 +53,7 @@ public class BeaconCartLevelRecipe extends Impl<IRecipe> implements IRecipe {
 			} else if (stack.getItem() instanceof ItemBlock
 					&& Block.getBlockFromItem(stack.getItem())
 					.isBeaconBase(
-							new FakeOneBlockAccess(Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata())),
+							new FakeOneBlockAccess(blockFromStack(stack)),
 							BlockPos.ORIGIN, BlockPos.ORIGIN)) {
 				ItemStack oneItemStack = stack.copy();
 				oneItemStack.setCount(1);

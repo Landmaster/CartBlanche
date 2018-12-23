@@ -1,5 +1,7 @@
 package landmaster.cartblanche.util;
 
+import javax.annotation.*;
+
 import net.minecraft.block.state.*;
 import net.minecraft.init.*;
 import net.minecraft.tileentity.*;
@@ -9,7 +11,7 @@ import net.minecraft.world.*;
 import net.minecraft.world.biome.*;
 
 public class FakeOneBlockAccess implements IBlockAccess {
-	private IBlockState state;
+	private @Nullable IBlockState state;
 	
 	public FakeOneBlockAccess(IBlockState state) {
 		this.state = state;
@@ -27,12 +29,12 @@ public class FakeOneBlockAccess implements IBlockAccess {
 	
 	@Override
 	public IBlockState getBlockState(BlockPos pos) {
-		return pos.equals(BlockPos.ORIGIN) ? this.state : Blocks.AIR.getDefaultState();
+		return pos.equals(BlockPos.ORIGIN) && this.state != null ? this.state : Blocks.AIR.getDefaultState();
 	}
 	
 	@Override
 	public boolean isAirBlock(BlockPos pos) {
-		return !pos.equals(BlockPos.ORIGIN);
+		return !pos.equals(BlockPos.ORIGIN) || this.state == null || this.state.getBlock().isAir(this.state, this, pos);
 	}
 	
 	@Override
@@ -52,7 +54,7 @@ public class FakeOneBlockAccess implements IBlockAccess {
 	
 	@Override
 	public boolean isSideSolid(BlockPos pos, EnumFacing side, boolean _default) {
-		return pos.equals(BlockPos.ORIGIN) ? this.state.isSideSolid(this, pos, side) : _default;
+		return pos.equals(BlockPos.ORIGIN) && this.state != null ? this.state.isSideSolid(this, pos, side) : _default;
 	}
 	
 }
