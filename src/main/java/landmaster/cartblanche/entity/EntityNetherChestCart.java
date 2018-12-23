@@ -8,6 +8,7 @@ import com.google.common.base.*;
 
 import landmaster.cartblanche.*;
 import landmaster.cartblanche.gui.*;
+import landmaster.cartblanche.item.*;
 import landmaster.cartblanche.util.*;
 import net.minecraft.block.state.*;
 import net.minecraft.entity.item.*;
@@ -28,6 +29,13 @@ import netherchest.common.tileentity.*;
 public class EntityNetherChestCart extends EntityMinecartContainer {
 	private ExtendedItemStackHandler handler;
 	private TileEntityNetherChest fakeTE;
+	
+	public static class Factory implements ItemModMinecart.IReducedMinecartFactory {
+		@Override
+		public EntityMinecart create(World worldIn, double x, double y, double z) {
+			return new EntityNetherChestCart(worldIn,x,y,z);
+		}
+	}
 	
 	public EntityNetherChestCart(World worldIn) {
 		super(worldIn);

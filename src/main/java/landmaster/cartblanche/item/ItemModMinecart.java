@@ -42,7 +42,7 @@ public class ItemModMinecart extends ItemMinecart {
 				.setBeaconMaterials(ModItems.mod_minecart.getBeaconMaterials(stack)), () -> Config.beacon_cart),
 		IRON_CHEST((worldIn, x, y, z, stack) -> new EntityIronChestCart(worldIn,x,y,z)
 				.setChestType(ModItems.mod_minecart.getIronChestType(stack)), () -> Config.iron_chest_cart),
-		NETHER_CHEST((IReducedMinecartFactory)EntityNetherChestCart::new, () -> Config.nether_chest_cart),
+		NETHER_CHEST(new EntityNetherChestCart.Factory(), () -> Config.nether_chest_cart),
 		BANNER((worldIn, x, y, z, stack) -> new EntityBannerCart(worldIn,x,y,z)
 				.setBaseColor(ModItems.mod_minecart.getBannerBaseColor(stack))
 				.setPatterns(ModItems.mod_minecart.getPatterns(stack)), () -> Config.banner_cart);
