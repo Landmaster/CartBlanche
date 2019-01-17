@@ -17,8 +17,10 @@ import net.minecraft.nbt.*;
 import net.minecraft.world.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.entity.minecart.*;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.*;
 import net.minecraftforge.fml.common.gameevent.*;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class IronChestStuff {
 	static {
@@ -89,7 +91,11 @@ public class IronChestStuff {
 	private static final MethodHandle guiChestConstructorHandle;
 	static {
 		try {
-			guiChestConstructorHandle = Utils.IMPL_LOOKUP.findConstructor(GUIChest.class, MethodType.methodType(void.class, GUIChest.GUI.class, IInventory.class, IInventory.class));
+			if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+				guiChestConstructorHandle = Utils.IMPL_LOOKUP.findConstructor(GUIChest.class, MethodType.methodType(void.class, GUIChest.GUI.class, IInventory.class, IInventory.class));
+			} else {
+				guiChestConstructorHandle = null;
+			}
 		} catch (Throwable e) {
 			Throwables.throwIfUnchecked(e);
 			throw new RuntimeException(e);
