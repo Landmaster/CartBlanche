@@ -32,7 +32,7 @@ public class BeaconCartLevelRecipe extends Impl<IRecipe> implements IRecipe {
 	private static IBlockState blockFromStack(ItemStack stack) {
 		try {
 			return Block.getBlockFromItem(stack.getItem()).getStateFromMeta(stack.getMetadata());
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}

@@ -38,10 +38,14 @@ public class BeaconCartLevelRecipeJEI implements ICraftingRecipeWrapper {
 					})
 					.filter(stack -> stack.getItem() instanceof ItemBlock)
 					.filter(stack -> {
-						Block block = Block.getBlockFromItem(stack.getItem());
-						@SuppressWarnings("deprecation")
-						IBlockState state = block.getStateFromMeta(stack.getMetadata());
-						return block.isBeaconBase(new FakeOneBlockAccess(state), BlockPos.ORIGIN, BlockPos.ORIGIN);
+						try {
+							Block block = Block.getBlockFromItem(stack.getItem());
+							@SuppressWarnings("deprecation")
+							IBlockState state = block.getStateFromMeta(stack.getMetadata());
+							return block.isBeaconBase(new FakeOneBlockAccess(state), BlockPos.ORIGIN, BlockPos.ORIGIN);
+						} catch (Throwable e) {
+							return false;
+						}
 					})
 					.collect(Collectors.toList());
 		}
