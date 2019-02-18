@@ -12,7 +12,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 
-version = "1.0.6.4"
+version = "1.0.6.5"
 group= "landmaster.cartblanche" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "cartblanche"
 
@@ -69,7 +69,10 @@ dependencies {
 	// http://www.gradle.org/docs/current/userguide/dependency_management.html
 	
 	deobfCompile "mezz.jei:jei_1.12.2:4.13.1.225:api"
-    runtime "mezz.jei:jei_1.12.2:4.13.1.225"
+	runtime "mezz.jei:jei_1.12.2:4.13.1.225"
+	compile files("./libs/ironchest-1.12.2-7.0.54.838.jar")
+	compile files("./libs/netherchest-1.1.0.jar")
+	//compile files("./libs/railcraft-12.0.0-beta-5.jar")
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens

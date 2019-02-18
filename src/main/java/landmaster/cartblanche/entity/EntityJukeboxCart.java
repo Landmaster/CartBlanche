@@ -127,7 +127,7 @@ public class EntityJukeboxCart extends EntityMinecart {
 						&& stack.getItem() instanceof ItemRecord
 						&& !soundMap.containsKey(EntityJukeboxCart.this.getEntityId())) {
 					Object sound = CartBlanche.proxy.playJukeboxCartSound(((ItemRecord) stack.getItem()).getSound(),
-							SoundCategory.MUSIC, EntityJukeboxCart.this);
+							SoundCategory.RECORDS, EntityJukeboxCart.this);
 					soundMap.put(EntityJukeboxCart.this.getEntityId(), sound);
 				}
 			}
